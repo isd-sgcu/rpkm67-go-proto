@@ -7,7 +7,7 @@
 package v1
 
 import (
-	v1 "github.com/isd-sgcu/johnjud-go-proto/rpkm67/backend/baan/v1"
+	v1 "github.com/isd-sgcu/rpkm67-go-proto/rpkm67/backend/baan/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
