@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserService_Create_FullMethodName          = "/rpkm67.auth.user.v1.UserService/Create"
-	UserService_FindOne_FullMethodName         = "/rpkm67.auth.user.v1.UserService/FindOne"
-	UserService_FindByStudentId_FullMethodName = "/rpkm67.auth.user.v1.UserService/FindByStudentId"
+	UserService_Create_FullMethodName      = "/rpkm67.auth.user.v1.UserService/Create"
+	UserService_FindOne_FullMethodName     = "/rpkm67.auth.user.v1.UserService/FindOne"
+	UserService_FindByEmail_FullMethodName = "/rpkm67.auth.user.v1.UserService/FindByEmail"
+	UserService_Update_FullMethodName      = "/rpkm67.auth.user.v1.UserService/Update"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -30,7 +31,8 @@ const (
 type UserServiceClient interface {
 	Create(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	FindOne(ctx context.Context, in *FindOneUserRequest, opts ...grpc.CallOption) (*FindOneUserResponse, error)
-	FindByStudentId(ctx context.Context, in *FindByStudentIdRequest, opts ...grpc.CallOption) (*FindByStudentIdResponse, error)
+	FindByEmail(ctx context.Context, in *FindByEmailRequest, opts ...grpc.CallOption) (*FindByEmailResponse, error)
+	Update(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
 }
 
 type userServiceClient struct {
@@ -59,9 +61,18 @@ func (c *userServiceClient) FindOne(ctx context.Context, in *FindOneUserRequest,
 	return out, nil
 }
 
-func (c *userServiceClient) FindByStudentId(ctx context.Context, in *FindByStudentIdRequest, opts ...grpc.CallOption) (*FindByStudentIdResponse, error) {
-	out := new(FindByStudentIdResponse)
-	err := c.cc.Invoke(ctx, UserService_FindByStudentId_FullMethodName, in, out, opts...)
+func (c *userServiceClient) FindByEmail(ctx context.Context, in *FindByEmailRequest, opts ...grpc.CallOption) (*FindByEmailResponse, error) {
+	out := new(FindByEmailResponse)
+	err := c.cc.Invoke(ctx, UserService_FindByEmail_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) Update(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error) {
+	out := new(UpdateUserResponse)
+	err := c.cc.Invoke(ctx, UserService_Update_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +85,8 @@ func (c *userServiceClient) FindByStudentId(ctx context.Context, in *FindByStude
 type UserServiceServer interface {
 	Create(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	FindOne(context.Context, *FindOneUserRequest) (*FindOneUserResponse, error)
-	FindByStudentId(context.Context, *FindByStudentIdRequest) (*FindByStudentIdResponse, error)
+	FindByEmail(context.Context, *FindByEmailRequest) (*FindByEmailResponse, error)
+	Update(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -88,8 +100,11 @@ func (UnimplementedUserServiceServer) Create(context.Context, *CreateUserRequest
 func (UnimplementedUserServiceServer) FindOne(context.Context, *FindOneUserRequest) (*FindOneUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindOne not implemented")
 }
-func (UnimplementedUserServiceServer) FindByStudentId(context.Context, *FindByStudentIdRequest) (*FindByStudentIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindByStudentId not implemented")
+func (UnimplementedUserServiceServer) FindByEmail(context.Context, *FindByEmailRequest) (*FindByEmailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindByEmail not implemented")
+}
+func (UnimplementedUserServiceServer) Update(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -140,20 +155,38 @@ func _UserService_FindOne_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_FindByStudentId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindByStudentIdRequest)
+func _UserService_FindByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindByEmailRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).FindByStudentId(ctx, in)
+		return srv.(UserServiceServer).FindByEmail(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserService_FindByStudentId_FullMethodName,
+		FullMethod: UserService_FindByEmail_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).FindByStudentId(ctx, req.(*FindByStudentIdRequest))
+		return srv.(UserServiceServer).FindByEmail(ctx, req.(*FindByEmailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_Update_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).Update(ctx, req.(*UpdateUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -174,8 +207,12 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_FindOne_Handler,
 		},
 		{
-			MethodName: "FindByStudentId",
-			Handler:    _UserService_FindByStudentId_Handler,
+			MethodName: "FindByEmail",
+			Handler:    _UserService_FindByEmail_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _UserService_Update_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

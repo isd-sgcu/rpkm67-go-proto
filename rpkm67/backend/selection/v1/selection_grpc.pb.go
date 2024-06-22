@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SelectionService_Create_FullMethodName          = "/rpkm67.backend.selection.v1.SelectionService/Create"
-	SelectionService_FindByStudentId_FullMethodName = "/rpkm67.backend.selection.v1.SelectionService/FindByStudentId"
-	SelectionService_Update_FullMethodName          = "/rpkm67.backend.selection.v1.SelectionService/Update"
+	SelectionService_Create_FullMethodName        = "/rpkm67.backend.selection.v1.SelectionService/Create"
+	SelectionService_FindByGroupId_FullMethodName = "/rpkm67.backend.selection.v1.SelectionService/FindByGroupId"
+	SelectionService_Update_FullMethodName        = "/rpkm67.backend.selection.v1.SelectionService/Update"
 )
 
 // SelectionServiceClient is the client API for SelectionService service.
@@ -29,7 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SelectionServiceClient interface {
 	Create(ctx context.Context, in *CreateSelectionRequest, opts ...grpc.CallOption) (*CreateSelectionResponse, error)
-	FindByStudentId(ctx context.Context, in *FindByStudentIdSelectionRequest, opts ...grpc.CallOption) (*FindByStudentIdSelectionResponse, error)
+	FindByGroupId(ctx context.Context, in *FindByGroupIdSelectionRequest, opts ...grpc.CallOption) (*FindByGroupIdSelectionResponse, error)
 	Update(ctx context.Context, in *UpdateSelectionRequest, opts ...grpc.CallOption) (*UpdateSelectionResponse, error)
 }
 
@@ -50,9 +50,9 @@ func (c *selectionServiceClient) Create(ctx context.Context, in *CreateSelection
 	return out, nil
 }
 
-func (c *selectionServiceClient) FindByStudentId(ctx context.Context, in *FindByStudentIdSelectionRequest, opts ...grpc.CallOption) (*FindByStudentIdSelectionResponse, error) {
-	out := new(FindByStudentIdSelectionResponse)
-	err := c.cc.Invoke(ctx, SelectionService_FindByStudentId_FullMethodName, in, out, opts...)
+func (c *selectionServiceClient) FindByGroupId(ctx context.Context, in *FindByGroupIdSelectionRequest, opts ...grpc.CallOption) (*FindByGroupIdSelectionResponse, error) {
+	out := new(FindByGroupIdSelectionResponse)
+	err := c.cc.Invoke(ctx, SelectionService_FindByGroupId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +73,7 @@ func (c *selectionServiceClient) Update(ctx context.Context, in *UpdateSelection
 // for forward compatibility
 type SelectionServiceServer interface {
 	Create(context.Context, *CreateSelectionRequest) (*CreateSelectionResponse, error)
-	FindByStudentId(context.Context, *FindByStudentIdSelectionRequest) (*FindByStudentIdSelectionResponse, error)
+	FindByGroupId(context.Context, *FindByGroupIdSelectionRequest) (*FindByGroupIdSelectionResponse, error)
 	Update(context.Context, *UpdateSelectionRequest) (*UpdateSelectionResponse, error)
 	mustEmbedUnimplementedSelectionServiceServer()
 }
@@ -85,8 +85,8 @@ type UnimplementedSelectionServiceServer struct {
 func (UnimplementedSelectionServiceServer) Create(context.Context, *CreateSelectionRequest) (*CreateSelectionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedSelectionServiceServer) FindByStudentId(context.Context, *FindByStudentIdSelectionRequest) (*FindByStudentIdSelectionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindByStudentId not implemented")
+func (UnimplementedSelectionServiceServer) FindByGroupId(context.Context, *FindByGroupIdSelectionRequest) (*FindByGroupIdSelectionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindByGroupId not implemented")
 }
 func (UnimplementedSelectionServiceServer) Update(context.Context, *UpdateSelectionRequest) (*UpdateSelectionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
@@ -122,20 +122,20 @@ func _SelectionService_Create_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SelectionService_FindByStudentId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindByStudentIdSelectionRequest)
+func _SelectionService_FindByGroupId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindByGroupIdSelectionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SelectionServiceServer).FindByStudentId(ctx, in)
+		return srv.(SelectionServiceServer).FindByGroupId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: SelectionService_FindByStudentId_FullMethodName,
+		FullMethod: SelectionService_FindByGroupId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SelectionServiceServer).FindByStudentId(ctx, req.(*FindByStudentIdSelectionRequest))
+		return srv.(SelectionServiceServer).FindByGroupId(ctx, req.(*FindByGroupIdSelectionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -170,8 +170,8 @@ var SelectionService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SelectionService_Create_Handler,
 		},
 		{
-			MethodName: "FindByStudentId",
-			Handler:    _SelectionService_FindByStudentId_Handler,
+			MethodName: "FindByGroupId",
+			Handler:    _SelectionService_FindByGroupId_Handler,
 		},
 		{
 			MethodName: "Update",
