@@ -21,7 +21,8 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	SelectionService_Create_FullMethodName        = "/rpkm67.backend.selection.v1.SelectionService/Create"
 	SelectionService_FindByGroupId_FullMethodName = "/rpkm67.backend.selection.v1.SelectionService/FindByGroupId"
-	SelectionService_Update_FullMethodName        = "/rpkm67.backend.selection.v1.SelectionService/Update"
+	SelectionService_Delete_FullMethodName        = "/rpkm67.backend.selection.v1.SelectionService/Delete"
+	SelectionService_CountByBaanId_FullMethodName = "/rpkm67.backend.selection.v1.SelectionService/CountByBaanId"
 )
 
 // SelectionServiceClient is the client API for SelectionService service.
@@ -30,7 +31,8 @@ const (
 type SelectionServiceClient interface {
 	Create(ctx context.Context, in *CreateSelectionRequest, opts ...grpc.CallOption) (*CreateSelectionResponse, error)
 	FindByGroupId(ctx context.Context, in *FindByGroupIdSelectionRequest, opts ...grpc.CallOption) (*FindByGroupIdSelectionResponse, error)
-	Update(ctx context.Context, in *UpdateSelectionRequest, opts ...grpc.CallOption) (*UpdateSelectionResponse, error)
+	Delete(ctx context.Context, in *DeleteSelectionRequest, opts ...grpc.CallOption) (*DeleteSelectionResponse, error)
+	CountByBaanId(ctx context.Context, in *CountByBaanIdSelectionRequest, opts ...grpc.CallOption) (*CountByBaanIdSelectionResponse, error)
 }
 
 type selectionServiceClient struct {
@@ -59,9 +61,18 @@ func (c *selectionServiceClient) FindByGroupId(ctx context.Context, in *FindByGr
 	return out, nil
 }
 
-func (c *selectionServiceClient) Update(ctx context.Context, in *UpdateSelectionRequest, opts ...grpc.CallOption) (*UpdateSelectionResponse, error) {
-	out := new(UpdateSelectionResponse)
-	err := c.cc.Invoke(ctx, SelectionService_Update_FullMethodName, in, out, opts...)
+func (c *selectionServiceClient) Delete(ctx context.Context, in *DeleteSelectionRequest, opts ...grpc.CallOption) (*DeleteSelectionResponse, error) {
+	out := new(DeleteSelectionResponse)
+	err := c.cc.Invoke(ctx, SelectionService_Delete_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *selectionServiceClient) CountByBaanId(ctx context.Context, in *CountByBaanIdSelectionRequest, opts ...grpc.CallOption) (*CountByBaanIdSelectionResponse, error) {
+	out := new(CountByBaanIdSelectionResponse)
+	err := c.cc.Invoke(ctx, SelectionService_CountByBaanId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +85,8 @@ func (c *selectionServiceClient) Update(ctx context.Context, in *UpdateSelection
 type SelectionServiceServer interface {
 	Create(context.Context, *CreateSelectionRequest) (*CreateSelectionResponse, error)
 	FindByGroupId(context.Context, *FindByGroupIdSelectionRequest) (*FindByGroupIdSelectionResponse, error)
-	Update(context.Context, *UpdateSelectionRequest) (*UpdateSelectionResponse, error)
+	Delete(context.Context, *DeleteSelectionRequest) (*DeleteSelectionResponse, error)
+	CountByBaanId(context.Context, *CountByBaanIdSelectionRequest) (*CountByBaanIdSelectionResponse, error)
 	mustEmbedUnimplementedSelectionServiceServer()
 }
 
@@ -88,8 +100,11 @@ func (UnimplementedSelectionServiceServer) Create(context.Context, *CreateSelect
 func (UnimplementedSelectionServiceServer) FindByGroupId(context.Context, *FindByGroupIdSelectionRequest) (*FindByGroupIdSelectionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindByGroupId not implemented")
 }
-func (UnimplementedSelectionServiceServer) Update(context.Context, *UpdateSelectionRequest) (*UpdateSelectionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedSelectionServiceServer) Delete(context.Context, *DeleteSelectionRequest) (*DeleteSelectionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedSelectionServiceServer) CountByBaanId(context.Context, *CountByBaanIdSelectionRequest) (*CountByBaanIdSelectionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CountByBaanId not implemented")
 }
 func (UnimplementedSelectionServiceServer) mustEmbedUnimplementedSelectionServiceServer() {}
 
@@ -140,20 +155,38 @@ func _SelectionService_FindByGroupId_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SelectionService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateSelectionRequest)
+func _SelectionService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteSelectionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SelectionServiceServer).Update(ctx, in)
+		return srv.(SelectionServiceServer).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: SelectionService_Update_FullMethodName,
+		FullMethod: SelectionService_Delete_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SelectionServiceServer).Update(ctx, req.(*UpdateSelectionRequest))
+		return srv.(SelectionServiceServer).Delete(ctx, req.(*DeleteSelectionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SelectionService_CountByBaanId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CountByBaanIdSelectionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SelectionServiceServer).CountByBaanId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SelectionService_CountByBaanId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SelectionServiceServer).CountByBaanId(ctx, req.(*CountByBaanIdSelectionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -174,8 +207,12 @@ var SelectionService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SelectionService_FindByGroupId_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _SelectionService_Update_Handler,
+			MethodName: "Delete",
+			Handler:    _SelectionService_Delete_Handler,
+		},
+		{
+			MethodName: "CountByBaanId",
+			Handler:    _SelectionService_CountByBaanId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
