@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	CheckInService_Create_FullMethodName      = "/rpkm67.checkin.checkin.v1.CheckInService/Create"
-	CheckInService_FindByEmail_FullMethodName = "/rpkm67.checkin.checkin.v1.CheckInService/FindByEmail"
+	CheckInService_Create_FullMethodName       = "/rpkm67.checkin.checkin.v1.CheckInService/Create"
+	CheckInService_FindByUserId_FullMethodName = "/rpkm67.checkin.checkin.v1.CheckInService/FindByUserId"
+	CheckInService_FindByEmail_FullMethodName  = "/rpkm67.checkin.checkin.v1.CheckInService/FindByEmail"
 )
 
 // CheckInServiceClient is the client API for CheckInService service.
@@ -28,6 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CheckInServiceClient interface {
 	Create(ctx context.Context, in *CreateCheckInRequest, opts ...grpc.CallOption) (*CreateCheckInResponse, error)
+	FindByUserId(ctx context.Context, in *FindByUserIdCheckInRequest, opts ...grpc.CallOption) (*FindByUserIdCheckInResponse, error)
 	FindByEmail(ctx context.Context, in *FindByEmailCheckInRequest, opts ...grpc.CallOption) (*FindByEmailCheckInResponse, error)
 }
 
@@ -48,6 +50,15 @@ func (c *checkInServiceClient) Create(ctx context.Context, in *CreateCheckInRequ
 	return out, nil
 }
 
+func (c *checkInServiceClient) FindByUserId(ctx context.Context, in *FindByUserIdCheckInRequest, opts ...grpc.CallOption) (*FindByUserIdCheckInResponse, error) {
+	out := new(FindByUserIdCheckInResponse)
+	err := c.cc.Invoke(ctx, CheckInService_FindByUserId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *checkInServiceClient) FindByEmail(ctx context.Context, in *FindByEmailCheckInRequest, opts ...grpc.CallOption) (*FindByEmailCheckInResponse, error) {
 	out := new(FindByEmailCheckInResponse)
 	err := c.cc.Invoke(ctx, CheckInService_FindByEmail_FullMethodName, in, out, opts...)
@@ -62,6 +73,7 @@ func (c *checkInServiceClient) FindByEmail(ctx context.Context, in *FindByEmailC
 // for forward compatibility
 type CheckInServiceServer interface {
 	Create(context.Context, *CreateCheckInRequest) (*CreateCheckInResponse, error)
+	FindByUserId(context.Context, *FindByUserIdCheckInRequest) (*FindByUserIdCheckInResponse, error)
 	FindByEmail(context.Context, *FindByEmailCheckInRequest) (*FindByEmailCheckInResponse, error)
 	mustEmbedUnimplementedCheckInServiceServer()
 }
@@ -72,6 +84,9 @@ type UnimplementedCheckInServiceServer struct {
 
 func (UnimplementedCheckInServiceServer) Create(context.Context, *CreateCheckInRequest) (*CreateCheckInResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedCheckInServiceServer) FindByUserId(context.Context, *FindByUserIdCheckInRequest) (*FindByUserIdCheckInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindByUserId not implemented")
 }
 func (UnimplementedCheckInServiceServer) FindByEmail(context.Context, *FindByEmailCheckInRequest) (*FindByEmailCheckInResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindByEmail not implemented")
@@ -107,6 +122,24 @@ func _CheckInService_Create_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CheckInService_FindByUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindByUserIdCheckInRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CheckInServiceServer).FindByUserId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CheckInService_FindByUserId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CheckInServiceServer).FindByUserId(ctx, req.(*FindByUserIdCheckInRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CheckInService_FindByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindByEmailCheckInRequest)
 	if err := dec(in); err != nil {
@@ -135,6 +168,10 @@ var CheckInService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _CheckInService_Create_Handler,
+		},
+		{
+			MethodName: "FindByUserId",
+			Handler:    _CheckInService_FindByUserId_Handler,
 		},
 		{
 			MethodName: "FindByEmail",
