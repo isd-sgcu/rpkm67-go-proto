@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	StampService_FindByUserId_FullMethodName = "/rpkm67.backend.stamp.v1.StampService/FindByUserId"
-	StampService_Stamp_FullMethodName        = "/rpkm67.backend.stamp.v1.StampService/Stamp"
+	StampService_FindByUserId_FullMethodName  = "/rpkm67.backend.stamp.v1.StampService/FindByUserId"
+	StampService_StampByUserId_FullMethodName = "/rpkm67.backend.stamp.v1.StampService/StampByUserId"
 )
 
 // StampServiceClient is the client API for StampService service.
@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StampServiceClient interface {
 	FindByUserId(ctx context.Context, in *FindByUserIdStampRequest, opts ...grpc.CallOption) (*FindByUserIdStampResponse, error)
-	Stamp(ctx context.Context, in *StampRequest, opts ...grpc.CallOption) (*StampResponse, error)
+	StampByUserId(ctx context.Context, in *StampByUserIdRequest, opts ...grpc.CallOption) (*StampByUserIdResponse, error)
 }
 
 type stampServiceClient struct {
@@ -48,9 +48,9 @@ func (c *stampServiceClient) FindByUserId(ctx context.Context, in *FindByUserIdS
 	return out, nil
 }
 
-func (c *stampServiceClient) Stamp(ctx context.Context, in *StampRequest, opts ...grpc.CallOption) (*StampResponse, error) {
-	out := new(StampResponse)
-	err := c.cc.Invoke(ctx, StampService_Stamp_FullMethodName, in, out, opts...)
+func (c *stampServiceClient) StampByUserId(ctx context.Context, in *StampByUserIdRequest, opts ...grpc.CallOption) (*StampByUserIdResponse, error) {
+	out := new(StampByUserIdResponse)
+	err := c.cc.Invoke(ctx, StampService_StampByUserId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (c *stampServiceClient) Stamp(ctx context.Context, in *StampRequest, opts .
 // for forward compatibility
 type StampServiceServer interface {
 	FindByUserId(context.Context, *FindByUserIdStampRequest) (*FindByUserIdStampResponse, error)
-	Stamp(context.Context, *StampRequest) (*StampResponse, error)
+	StampByUserId(context.Context, *StampByUserIdRequest) (*StampByUserIdResponse, error)
 	mustEmbedUnimplementedStampServiceServer()
 }
 
@@ -73,8 +73,8 @@ type UnimplementedStampServiceServer struct {
 func (UnimplementedStampServiceServer) FindByUserId(context.Context, *FindByUserIdStampRequest) (*FindByUserIdStampResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindByUserId not implemented")
 }
-func (UnimplementedStampServiceServer) Stamp(context.Context, *StampRequest) (*StampResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Stamp not implemented")
+func (UnimplementedStampServiceServer) StampByUserId(context.Context, *StampByUserIdRequest) (*StampByUserIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StampByUserId not implemented")
 }
 func (UnimplementedStampServiceServer) mustEmbedUnimplementedStampServiceServer() {}
 
@@ -107,20 +107,20 @@ func _StampService_FindByUserId_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StampService_Stamp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StampRequest)
+func _StampService_StampByUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StampByUserIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StampServiceServer).Stamp(ctx, in)
+		return srv.(StampServiceServer).StampByUserId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: StampService_Stamp_FullMethodName,
+		FullMethod: StampService_StampByUserId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StampServiceServer).Stamp(ctx, req.(*StampRequest))
+		return srv.(StampServiceServer).StampByUserId(ctx, req.(*StampByUserIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -137,8 +137,8 @@ var StampService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _StampService_FindByUserId_Handler,
 		},
 		{
-			MethodName: "Stamp",
-			Handler:    _StampService_Stamp_Handler,
+			MethodName: "StampByUserId",
+			Handler:    _StampService_StampByUserId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
