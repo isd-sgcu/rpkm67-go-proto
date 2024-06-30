@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
+	StampService_Create_FullMethodName        = "/rpkm67.backend.stamp.v1.StampService/Create"
 	StampService_FindByUserId_FullMethodName  = "/rpkm67.backend.stamp.v1.StampService/FindByUserId"
 	StampService_StampByUserId_FullMethodName = "/rpkm67.backend.stamp.v1.StampService/StampByUserId"
 )
@@ -27,6 +28,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StampServiceClient interface {
+	Create(ctx context.Context, in *CreateStampRequest, opts ...grpc.CallOption) (*CreateStampResponse, error)
 	FindByUserId(ctx context.Context, in *FindByUserIdStampRequest, opts ...grpc.CallOption) (*FindByUserIdStampResponse, error)
 	StampByUserId(ctx context.Context, in *StampByUserIdRequest, opts ...grpc.CallOption) (*StampByUserIdResponse, error)
 }
@@ -37,6 +39,15 @@ type stampServiceClient struct {
 
 func NewStampServiceClient(cc grpc.ClientConnInterface) StampServiceClient {
 	return &stampServiceClient{cc}
+}
+
+func (c *stampServiceClient) Create(ctx context.Context, in *CreateStampRequest, opts ...grpc.CallOption) (*CreateStampResponse, error) {
+	out := new(CreateStampResponse)
+	err := c.cc.Invoke(ctx, StampService_Create_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *stampServiceClient) FindByUserId(ctx context.Context, in *FindByUserIdStampRequest, opts ...grpc.CallOption) (*FindByUserIdStampResponse, error) {
@@ -61,6 +72,7 @@ func (c *stampServiceClient) StampByUserId(ctx context.Context, in *StampByUserI
 // All implementations must embed UnimplementedStampServiceServer
 // for forward compatibility
 type StampServiceServer interface {
+	Create(context.Context, *CreateStampRequest) (*CreateStampResponse, error)
 	FindByUserId(context.Context, *FindByUserIdStampRequest) (*FindByUserIdStampResponse, error)
 	StampByUserId(context.Context, *StampByUserIdRequest) (*StampByUserIdResponse, error)
 	mustEmbedUnimplementedStampServiceServer()
@@ -70,6 +82,9 @@ type StampServiceServer interface {
 type UnimplementedStampServiceServer struct {
 }
 
+func (UnimplementedStampServiceServer) Create(context.Context, *CreateStampRequest) (*CreateStampResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
 func (UnimplementedStampServiceServer) FindByUserId(context.Context, *FindByUserIdStampRequest) (*FindByUserIdStampResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindByUserId not implemented")
 }
@@ -87,6 +102,24 @@ type UnsafeStampServiceServer interface {
 
 func RegisterStampServiceServer(s grpc.ServiceRegistrar, srv StampServiceServer) {
 	s.RegisterService(&StampService_ServiceDesc, srv)
+}
+
+func _StampService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateStampRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StampServiceServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StampService_Create_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StampServiceServer).Create(ctx, req.(*CreateStampRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _StampService_FindByUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -132,6 +165,10 @@ var StampService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "rpkm67.backend.stamp.v1.StampService",
 	HandlerType: (*StampServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Create",
+			Handler:    _StampService_Create_Handler,
+		},
 		{
 			MethodName: "FindByUserId",
 			Handler:    _StampService_FindByUserId_Handler,
