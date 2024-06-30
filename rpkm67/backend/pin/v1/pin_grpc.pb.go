@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	PinService_FindAll_FullMethodName  = "/rpkm67.backend.pin.v1.PinService/FindAll"
 	PinService_ResetPin_FullMethodName = "/rpkm67.backend.pin.v1.PinService/ResetPin"
+	PinService_CheckPin_FullMethodName = "/rpkm67.backend.pin.v1.PinService/CheckPin"
 )
 
 // PinServiceClient is the client API for PinService service.
@@ -29,6 +30,7 @@ const (
 type PinServiceClient interface {
 	FindAll(ctx context.Context, in *FindAllPinRequest, opts ...grpc.CallOption) (*FindAllPinResponse, error)
 	ResetPin(ctx context.Context, in *ResetPinRequest, opts ...grpc.CallOption) (*ResetPinResponse, error)
+	CheckPin(ctx context.Context, in *CheckPinRequest, opts ...grpc.CallOption) (*CheckPinResponse, error)
 }
 
 type pinServiceClient struct {
@@ -57,12 +59,22 @@ func (c *pinServiceClient) ResetPin(ctx context.Context, in *ResetPinRequest, op
 	return out, nil
 }
 
+func (c *pinServiceClient) CheckPin(ctx context.Context, in *CheckPinRequest, opts ...grpc.CallOption) (*CheckPinResponse, error) {
+	out := new(CheckPinResponse)
+	err := c.cc.Invoke(ctx, PinService_CheckPin_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PinServiceServer is the server API for PinService service.
 // All implementations must embed UnimplementedPinServiceServer
 // for forward compatibility
 type PinServiceServer interface {
 	FindAll(context.Context, *FindAllPinRequest) (*FindAllPinResponse, error)
 	ResetPin(context.Context, *ResetPinRequest) (*ResetPinResponse, error)
+	CheckPin(context.Context, *CheckPinRequest) (*CheckPinResponse, error)
 	mustEmbedUnimplementedPinServiceServer()
 }
 
@@ -75,6 +87,9 @@ func (UnimplementedPinServiceServer) FindAll(context.Context, *FindAllPinRequest
 }
 func (UnimplementedPinServiceServer) ResetPin(context.Context, *ResetPinRequest) (*ResetPinResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResetPin not implemented")
+}
+func (UnimplementedPinServiceServer) CheckPin(context.Context, *CheckPinRequest) (*CheckPinResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckPin not implemented")
 }
 func (UnimplementedPinServiceServer) mustEmbedUnimplementedPinServiceServer() {}
 
@@ -125,6 +140,24 @@ func _PinService_ResetPin_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PinService_CheckPin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckPinRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PinServiceServer).CheckPin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PinService_CheckPin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PinServiceServer).CheckPin(ctx, req.(*CheckPinRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PinService_ServiceDesc is the grpc.ServiceDesc for PinService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -139,6 +172,10 @@ var PinService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ResetPin",
 			Handler:    _PinService_ResetPin_Handler,
+		},
+		{
+			MethodName: "CheckPin",
+			Handler:    _PinService_CheckPin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
