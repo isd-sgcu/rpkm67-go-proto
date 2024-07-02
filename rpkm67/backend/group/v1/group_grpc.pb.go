@@ -25,7 +25,6 @@ const (
 	GroupService_Join_FullMethodName         = "/rpkm67.backend.group.v1.GroupService/Join"
 	GroupService_DeleteMember_FullMethodName = "/rpkm67.backend.group.v1.GroupService/DeleteMember"
 	GroupService_Leave_FullMethodName        = "/rpkm67.backend.group.v1.GroupService/Leave"
-	GroupService_SelectBaan_FullMethodName   = "/rpkm67.backend.group.v1.GroupService/SelectBaan"
 )
 
 // GroupServiceClient is the client API for GroupService service.
@@ -38,7 +37,6 @@ type GroupServiceClient interface {
 	Join(ctx context.Context, in *JoinGroupRequest, opts ...grpc.CallOption) (*JoinGroupResponse, error)
 	DeleteMember(ctx context.Context, in *DeleteMemberGroupRequest, opts ...grpc.CallOption) (*DeleteMemberGroupResponse, error)
 	Leave(ctx context.Context, in *LeaveGroupRequest, opts ...grpc.CallOption) (*LeaveGroupResponse, error)
-	SelectBaan(ctx context.Context, in *SelectBaanRequest, opts ...grpc.CallOption) (*SelectBaanResponse, error)
 }
 
 type groupServiceClient struct {
@@ -103,15 +101,6 @@ func (c *groupServiceClient) Leave(ctx context.Context, in *LeaveGroupRequest, o
 	return out, nil
 }
 
-func (c *groupServiceClient) SelectBaan(ctx context.Context, in *SelectBaanRequest, opts ...grpc.CallOption) (*SelectBaanResponse, error) {
-	out := new(SelectBaanResponse)
-	err := c.cc.Invoke(ctx, GroupService_SelectBaan_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // GroupServiceServer is the server API for GroupService service.
 // All implementations must embed UnimplementedGroupServiceServer
 // for forward compatibility
@@ -122,7 +111,6 @@ type GroupServiceServer interface {
 	Join(context.Context, *JoinGroupRequest) (*JoinGroupResponse, error)
 	DeleteMember(context.Context, *DeleteMemberGroupRequest) (*DeleteMemberGroupResponse, error)
 	Leave(context.Context, *LeaveGroupRequest) (*LeaveGroupResponse, error)
-	SelectBaan(context.Context, *SelectBaanRequest) (*SelectBaanResponse, error)
 	mustEmbedUnimplementedGroupServiceServer()
 }
 
@@ -147,9 +135,6 @@ func (UnimplementedGroupServiceServer) DeleteMember(context.Context, *DeleteMemb
 }
 func (UnimplementedGroupServiceServer) Leave(context.Context, *LeaveGroupRequest) (*LeaveGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Leave not implemented")
-}
-func (UnimplementedGroupServiceServer) SelectBaan(context.Context, *SelectBaanRequest) (*SelectBaanResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SelectBaan not implemented")
 }
 func (UnimplementedGroupServiceServer) mustEmbedUnimplementedGroupServiceServer() {}
 
@@ -272,24 +257,6 @@ func _GroupService_Leave_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GroupService_SelectBaan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SelectBaanRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GroupServiceServer).SelectBaan(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: GroupService_SelectBaan_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServiceServer).SelectBaan(ctx, req.(*SelectBaanRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // GroupService_ServiceDesc is the grpc.ServiceDesc for GroupService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -320,10 +287,6 @@ var GroupService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Leave",
 			Handler:    _GroupService_Leave_Handler,
-		},
-		{
-			MethodName: "SelectBaan",
-			Handler:    _GroupService_SelectBaan_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
