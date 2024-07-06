@@ -19,26 +19,24 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	GroupService_FindOne_FullMethodName          = "/rpkm67.backend.group.v1.GroupService/FindOne"
-	GroupService_FindByToken_FullMethodName      = "/rpkm67.backend.group.v1.GroupService/FindByToken"
-	GroupService_Update_FullMethodName           = "/rpkm67.backend.group.v1.GroupService/Update"
-	GroupService_Join_FullMethodName             = "/rpkm67.backend.group.v1.GroupService/Join"
-	GroupService_DeleteMember_FullMethodName     = "/rpkm67.backend.group.v1.GroupService/DeleteMember"
-	GroupService_Leave_FullMethodName            = "/rpkm67.backend.group.v1.GroupService/Leave"
-	GroupService_ConfirmSelection_FullMethodName = "/rpkm67.backend.group.v1.GroupService/ConfirmSelection"
+	GroupService_FindByUserId_FullMethodName  = "/rpkm67.backend.group.v1.GroupService/FindByUserId"
+	GroupService_FindByToken_FullMethodName   = "/rpkm67.backend.group.v1.GroupService/FindByToken"
+	GroupService_UpdateConfirm_FullMethodName = "/rpkm67.backend.group.v1.GroupService/UpdateConfirm"
+	GroupService_Join_FullMethodName          = "/rpkm67.backend.group.v1.GroupService/Join"
+	GroupService_DeleteMember_FullMethodName  = "/rpkm67.backend.group.v1.GroupService/DeleteMember"
+	GroupService_Leave_FullMethodName         = "/rpkm67.backend.group.v1.GroupService/Leave"
 )
 
 // GroupServiceClient is the client API for GroupService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GroupServiceClient interface {
-	FindOne(ctx context.Context, in *FindOneGroupRequest, opts ...grpc.CallOption) (*FindOneGroupResponse, error)
+	FindByUserId(ctx context.Context, in *FindByUserIdGroupRequest, opts ...grpc.CallOption) (*FindByUserIdGroupResponse, error)
 	FindByToken(ctx context.Context, in *FindByTokenGroupRequest, opts ...grpc.CallOption) (*FindByTokenGroupResponse, error)
-	Update(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error)
+	UpdateConfirm(ctx context.Context, in *UpdateConfirmGroupRequest, opts ...grpc.CallOption) (*UpdateConfirmGroupResponse, error)
 	Join(ctx context.Context, in *JoinGroupRequest, opts ...grpc.CallOption) (*JoinGroupResponse, error)
 	DeleteMember(ctx context.Context, in *DeleteMemberGroupRequest, opts ...grpc.CallOption) (*DeleteMemberGroupResponse, error)
 	Leave(ctx context.Context, in *LeaveGroupRequest, opts ...grpc.CallOption) (*LeaveGroupResponse, error)
-	ConfirmSelection(ctx context.Context, in *ConfirmSelectionGroupRequest, opts ...grpc.CallOption) (*ConfirmSelectionGroupResponse, error)
 }
 
 type groupServiceClient struct {
@@ -49,9 +47,9 @@ func NewGroupServiceClient(cc grpc.ClientConnInterface) GroupServiceClient {
 	return &groupServiceClient{cc}
 }
 
-func (c *groupServiceClient) FindOne(ctx context.Context, in *FindOneGroupRequest, opts ...grpc.CallOption) (*FindOneGroupResponse, error) {
-	out := new(FindOneGroupResponse)
-	err := c.cc.Invoke(ctx, GroupService_FindOne_FullMethodName, in, out, opts...)
+func (c *groupServiceClient) FindByUserId(ctx context.Context, in *FindByUserIdGroupRequest, opts ...grpc.CallOption) (*FindByUserIdGroupResponse, error) {
+	out := new(FindByUserIdGroupResponse)
+	err := c.cc.Invoke(ctx, GroupService_FindByUserId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -67,9 +65,9 @@ func (c *groupServiceClient) FindByToken(ctx context.Context, in *FindByTokenGro
 	return out, nil
 }
 
-func (c *groupServiceClient) Update(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error) {
-	out := new(UpdateGroupResponse)
-	err := c.cc.Invoke(ctx, GroupService_Update_FullMethodName, in, out, opts...)
+func (c *groupServiceClient) UpdateConfirm(ctx context.Context, in *UpdateConfirmGroupRequest, opts ...grpc.CallOption) (*UpdateConfirmGroupResponse, error) {
+	out := new(UpdateConfirmGroupResponse)
+	err := c.cc.Invoke(ctx, GroupService_UpdateConfirm_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -103,26 +101,16 @@ func (c *groupServiceClient) Leave(ctx context.Context, in *LeaveGroupRequest, o
 	return out, nil
 }
 
-func (c *groupServiceClient) ConfirmSelection(ctx context.Context, in *ConfirmSelectionGroupRequest, opts ...grpc.CallOption) (*ConfirmSelectionGroupResponse, error) {
-	out := new(ConfirmSelectionGroupResponse)
-	err := c.cc.Invoke(ctx, GroupService_ConfirmSelection_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // GroupServiceServer is the server API for GroupService service.
 // All implementations must embed UnimplementedGroupServiceServer
 // for forward compatibility
 type GroupServiceServer interface {
-	FindOne(context.Context, *FindOneGroupRequest) (*FindOneGroupResponse, error)
+	FindByUserId(context.Context, *FindByUserIdGroupRequest) (*FindByUserIdGroupResponse, error)
 	FindByToken(context.Context, *FindByTokenGroupRequest) (*FindByTokenGroupResponse, error)
-	Update(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)
+	UpdateConfirm(context.Context, *UpdateConfirmGroupRequest) (*UpdateConfirmGroupResponse, error)
 	Join(context.Context, *JoinGroupRequest) (*JoinGroupResponse, error)
 	DeleteMember(context.Context, *DeleteMemberGroupRequest) (*DeleteMemberGroupResponse, error)
 	Leave(context.Context, *LeaveGroupRequest) (*LeaveGroupResponse, error)
-	ConfirmSelection(context.Context, *ConfirmSelectionGroupRequest) (*ConfirmSelectionGroupResponse, error)
 	mustEmbedUnimplementedGroupServiceServer()
 }
 
@@ -130,14 +118,14 @@ type GroupServiceServer interface {
 type UnimplementedGroupServiceServer struct {
 }
 
-func (UnimplementedGroupServiceServer) FindOne(context.Context, *FindOneGroupRequest) (*FindOneGroupResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindOne not implemented")
+func (UnimplementedGroupServiceServer) FindByUserId(context.Context, *FindByUserIdGroupRequest) (*FindByUserIdGroupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindByUserId not implemented")
 }
 func (UnimplementedGroupServiceServer) FindByToken(context.Context, *FindByTokenGroupRequest) (*FindByTokenGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindByToken not implemented")
 }
-func (UnimplementedGroupServiceServer) Update(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedGroupServiceServer) UpdateConfirm(context.Context, *UpdateConfirmGroupRequest) (*UpdateConfirmGroupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateConfirm not implemented")
 }
 func (UnimplementedGroupServiceServer) Join(context.Context, *JoinGroupRequest) (*JoinGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Join not implemented")
@@ -147,9 +135,6 @@ func (UnimplementedGroupServiceServer) DeleteMember(context.Context, *DeleteMemb
 }
 func (UnimplementedGroupServiceServer) Leave(context.Context, *LeaveGroupRequest) (*LeaveGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Leave not implemented")
-}
-func (UnimplementedGroupServiceServer) ConfirmSelection(context.Context, *ConfirmSelectionGroupRequest) (*ConfirmSelectionGroupResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ConfirmSelection not implemented")
 }
 func (UnimplementedGroupServiceServer) mustEmbedUnimplementedGroupServiceServer() {}
 
@@ -164,20 +149,20 @@ func RegisterGroupServiceServer(s grpc.ServiceRegistrar, srv GroupServiceServer)
 	s.RegisterService(&GroupService_ServiceDesc, srv)
 }
 
-func _GroupService_FindOne_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindOneGroupRequest)
+func _GroupService_FindByUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindByUserIdGroupRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GroupServiceServer).FindOne(ctx, in)
+		return srv.(GroupServiceServer).FindByUserId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GroupService_FindOne_FullMethodName,
+		FullMethod: GroupService_FindByUserId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServiceServer).FindOne(ctx, req.(*FindOneGroupRequest))
+		return srv.(GroupServiceServer).FindByUserId(ctx, req.(*FindByUserIdGroupRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -200,20 +185,20 @@ func _GroupService_FindByToken_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GroupService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateGroupRequest)
+func _GroupService_UpdateConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateConfirmGroupRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GroupServiceServer).Update(ctx, in)
+		return srv.(GroupServiceServer).UpdateConfirm(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GroupService_Update_FullMethodName,
+		FullMethod: GroupService_UpdateConfirm_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServiceServer).Update(ctx, req.(*UpdateGroupRequest))
+		return srv.(GroupServiceServer).UpdateConfirm(ctx, req.(*UpdateConfirmGroupRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -272,24 +257,6 @@ func _GroupService_Leave_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GroupService_ConfirmSelection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConfirmSelectionGroupRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GroupServiceServer).ConfirmSelection(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: GroupService_ConfirmSelection_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GroupServiceServer).ConfirmSelection(ctx, req.(*ConfirmSelectionGroupRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // GroupService_ServiceDesc is the grpc.ServiceDesc for GroupService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -298,16 +265,16 @@ var GroupService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*GroupServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "FindOne",
-			Handler:    _GroupService_FindOne_Handler,
+			MethodName: "FindByUserId",
+			Handler:    _GroupService_FindByUserId_Handler,
 		},
 		{
 			MethodName: "FindByToken",
 			Handler:    _GroupService_FindByToken_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _GroupService_Update_Handler,
+			MethodName: "UpdateConfirm",
+			Handler:    _GroupService_UpdateConfirm_Handler,
 		},
 		{
 			MethodName: "Join",
@@ -320,10 +287,6 @@ var GroupService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Leave",
 			Handler:    _GroupService_Leave_Handler,
-		},
-		{
-			MethodName: "ConfirmSelection",
-			Handler:    _GroupService_ConfirmSelection_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
