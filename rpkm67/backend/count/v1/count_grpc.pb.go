@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.23.4
-// source: rpkm67/backend/count/count.proto
+// source: rpkm67/backend/count/v1/count.proto
 
 package v1
 
@@ -142,5 +142,5 @@ var CountService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "rpkm67/backend/count/count.proto",
+	Metadata: "rpkm67/backend/count/v1/count.proto",
 }
